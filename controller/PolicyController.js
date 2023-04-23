@@ -1,14 +1,31 @@
 const Policy = require('../models/policyModel');
-
+const User = require('../models/userModel');
+const Carrier = require('../models/carrierModel');
+const Lob = require('../models/lobModel');
 exports.getAllPolicy = async (req, res) => {
   try {
     const policies = await Policy.find({});
-    // SEND RESPONSE
+    const finalResponse = [];
+
+    for (let i = 0; i < policies.length; i++) {
+      const { userId, carrierId, lobId } = policies[i];
+      const user = await User.findById(userId);
+      const carrier = await Carrier.findById(carrierId);
+      const lob = await Lob.findById(lobId);
+
+      const temp = {
+        ...policies[i]._doc,
+        user: user.toObject(),
+        carrier: carrier.toObject(),
+        lob: lob.toObject(),
+      };
+      finalResponse.push(temp);
+    }
     res.status(200).json({
       status: 'success',
-      results: policies.length,
+      results: finalResponse.length,
       data: {
-        policies,
+        policies: finalResponse,
       },
     });
   } catch (err) {
@@ -23,7 +40,6 @@ exports.createPolicy = async (req, res) => {
   try {
     const newPolicy = await Policy.create(req.body);
 
-
     res.status(201).json({
       status: 'success',
       data: {
@@ -31,7 +47,6 @@ exports.createPolicy = async (req, res) => {
       },
     });
   } catch (err) {
-   
     res.status(400).json({
       status: 'fail',
       message: err.message,
