@@ -12,7 +12,6 @@ exports.getAllPolicy = async (req, res) => {
       const user = await User.findById(userId);
       const carrier = await Carrier.findById(carrierId);
       const lob = await Lob.findById(lobId);
-
       const temp = {
         ...policies[i]._doc,
         user: user.toObject(),
