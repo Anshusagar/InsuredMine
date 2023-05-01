@@ -1,8 +1,7 @@
 const app = require('./app');
 const mongoose = require('mongoose');
 
-const uri =
-  'mongodb+srv://yuvraajanshu:HLkw6zgShpuWLkyb@cluster0.oysofci.mongodb.net/InsuredDB?retryWrites=true&w=majority';
+const uri =''
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
